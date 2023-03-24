@@ -5,8 +5,8 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Prepare environment
 1. Download and install nodejs from https://nodejs.org/en/download
 2. Open terminal under angularapp/, run below commands
-    a. Install angular CLI: npm install @angular/cli
-    b. Install all dependencies: npm install
+    1. Install angular CLI: npm install @angular/cli
+    2. Install all dependencies: npm install
 3. For Windowsm, open powershell as admin and run below command followed by 'A', to allow ng command in powershell
     set-ExecutionPolicy RemoteSigned
 
