@@ -1,0 +1,44 @@
+<div class="container">
+  <h1 id="tableLabel">Fake Data Generator</h1>
+
+  <p>This component demonstrates fetching data from the server.</p>
+
+  <div class="row mt-5" *ngFor="let schema of schemas; index as i">
+    <div class="row mt-1" *ngFor="let attribute of schema.attributes; index as j">
+      {{schema.name}} - {{attribute.attrName}} - {{attribute.type}}
+    </div>
+    <div>
+      <button (click)="addAttr(schema)">Add attribute</button>
+    </div>
+  </div>
+  <div class="row mt-5">
+    <div class="col">
+      <button (click)="addSchema()">Add schema</button>
+    </div>
+    <div class="col"></div>
+    <div class="col"></div>
+    <div class="col"></div>
+  </div>
+  <div class="row mt-2">
+    <p></p>
+  </div>
+</div>
+
+<table *ngIf="forecasts">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Temp. (C)</th>
+      <th>Temp. (F)</th>
+      <th>Summary</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let forecast of forecasts">
+      <td>{{ forecast.date }}</td>
+      <td>{{ forecast.temperatureC }}</td>
+      <td>{{ forecast.temperatureF }}</td>
+      <td>{{ forecast.summary }}</td>
+    </tr>
+  </tbody>
+</table>
