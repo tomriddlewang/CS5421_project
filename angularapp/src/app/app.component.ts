@@ -10,7 +10,7 @@ export class AppComponent implements OnInit {
   public forecasts?: WeatherForecast[];
 
   isDataReady: boolean = false;
-  testString?: string[];
+  schemas: ISchema[] = [];
 
   constructor(http: HttpClient) {
     //http.get<WeatherForecast[]>('/weatherforecast').subscribe(result => {
@@ -22,6 +22,41 @@ export class AppComponent implements OnInit {
 
   ngOnInit(){
     console.log("AHHHHHHHHA");
+    this.schemas.push({
+      name: 'schema1',
+      attributes: [
+        {
+          attrName: 'id',
+          type: 'GUID',
+          options: new Map()
+        }
+      ]
+    });
+  }
+
+  addSchema(){
+    console.log("ADDDDDD");
+    console.log(this.schemas);
+    this.schemas.push({
+      name: 'schema2',
+      attributes: [
+        {
+          attrName: 'id',
+          type: 'GUID',
+          options: new Map()
+        }
+      ]
+    });
+  }
+
+  addAttr(schema: ISchema){
+    schema.attributes.push(
+      {
+        attrName:'NewAttribute',
+        type:'',
+        options: new Map()
+      }
+    );
   }
 
 }
@@ -34,5 +69,12 @@ interface WeatherForecast {
 }
 
 interface ISchema {
+  name: string;
+  attributes: IAttribute[];
+}
 
+interface IAttribute {
+  attrName: string;
+  type: string;
+  options: Map<string, string>;
 }

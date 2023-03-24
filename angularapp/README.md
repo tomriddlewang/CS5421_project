@@ -2,6 +2,19 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.4.
 
+## Prepare environment
+1. Download and install nodejs from https://nodejs.org/en/download
+2. Open terminal under angularapp/, run below commands
+    a. Install angular CLI: npm install @angular/cli
+    b. Install all dependencies: npm install
+3. For Windowsm, open powershell as admin and run below command followed by 'A', to allow ng command in powershell
+    set-ExecutionPolicy RemoteSigned
+
+
+## Run
+ng serve
+    
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
