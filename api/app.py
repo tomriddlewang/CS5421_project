@@ -31,22 +31,22 @@ def get_random(method, *params):
         return np.random.triangular(*params)
 
 
+
 @app.route('/data')
 def get_data():
     data = {'foo': 'bar'}
     return data
 
-# # http://localhost:5000/random_data?input=bla
-# @app.route('/random_data')
-# def get_random_data():
-#     input = request.args.get('input')
-#     data = {'foo': input}
-#     return data
-
 @app.route('/random_data_json', methods=['POST'])
 def post_random_data():
     input = request.get_json()
-    return input
+    schemas=SchemasInput(json.dumps(input))
+    first_schema = schemas.schemas[0]
+    df = pd.DataFrame()
+    for attr in first_schema['attributes']:
+        generate_column(attr['attrName'],schemas.rows,df)
+    return df.to_csv()
+
 
 
 def generate_columns(d,r,df):
@@ -91,19 +91,24 @@ def generate_column(c,r,df):
         for i in range(r):
             df.loc[i,c]=fake.company()
 
-            
-rows=10
-columns=['country','city','address','name','age','gender','phone_number','email','company']
-df = pd.DataFrame()
-for dependency in dependencies:
-    if all(column in columns for column in dependency):
-        for elem in dependency:
-            columns.remove(elem)
-    generate_columns(dependency,rows,df)
-for c in columns:
-    generate_column(c,rows,df)
-print(df)
+
+def test_method():
+    rows=10
+    columns=['country','city','address','name','age','gender','phone_number','email','company']
+    df = pd.DataFrame()
+    for dependency in dependencies:
+        if all(column in columns for column in dependency):
+            for elem in dependency:
+                columns.remove(elem)
+        generate_columns(dependency,rows,df)
+    for c in columns:
+        generate_column(c,rows,df)
+    print(df)
 
 
+test_method()
 
 
+class SchemasInput(object):
+    def __init__(self, j):
+        self.__dict__ = json.loads(j)
