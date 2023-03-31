@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -23,7 +24,7 @@ export class AppComponent implements OnInit {
   ngOnInit(){
     console.log("AHHHHHHHHA");
     this.schemas.push({
-      name: 'schema1',
+      name: 'schema0',
       attributes: [
         {
           attrName: 'id',
@@ -35,10 +36,9 @@ export class AppComponent implements OnInit {
   }
 
   addSchema(){
-    console.log("ADDDDDD");
-    console.log(this.schemas);
+    console.log(JSON.stringify(this.schemas));
     this.schemas.push({
-      name: 'schema2',
+      name: 'schema'+this.schemas.length,
       attributes: [
         {
           attrName: 'id',
@@ -57,6 +57,15 @@ export class AppComponent implements OnInit {
         options: new Map()
       }
     );
+  }
+
+  delSchema(i:number){
+    this.schemas.splice(i, 1);
+  }
+
+
+  showConfig(){
+    
   }
 
 }
