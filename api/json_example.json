@@ -1,0 +1,45 @@
+{
+    "0": {
+        "name": "company",
+        "type": "entity",
+        "attributes":{
+            "id":"id",
+            "country":"country",
+            "city":"city",
+            "address":"address",
+            "name":"company"
+        },
+        "primary_key":["id"],
+        "rows": 50
+    },
+    "1": {
+        "name": "employee",
+        "type": "entity",
+        "attributes":{
+            "id":"id",
+            "name":"name",
+            "age":"age",
+            "gender":"gender",
+            "phone_number":"phone_number",
+            "email":"email"
+        },
+        "primary_key":["id"],
+        "rows": 50
+    },
+    "2": {
+        "name": "employ",
+        "type": "relation",
+        "related": ["company","employee"],
+        "attributes":["company_id","employee_id","company_name","employee_name"],
+        "primary_key":["company_id","employee_id"],
+        "reference": {
+            "company_id":{"company":"id"},
+            "employee_id":{"employee":"id"},
+            "company_name":{"company":"name"},
+            "employee_name":{"employee":"name"}
+        },
+        "cardinality": "one_to_many",
+        "participation": {"company":false,"employee":true},
+        "selectivity": 0.2
+    }
+}
