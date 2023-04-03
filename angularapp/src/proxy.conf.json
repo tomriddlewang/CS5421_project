@@ -1,0 +1,6 @@
+{
+    "/random_data_json": {
+      "target": "http://localhost:5000",
+      "secure": false
+    }
+  }

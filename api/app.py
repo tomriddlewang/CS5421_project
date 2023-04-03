@@ -5,8 +5,10 @@ import json
 from types import SimpleNamespace
 import pandas as pd
 import numpy as np
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 fake = Faker()
 
 if __name__ == '__main__':
@@ -17,7 +19,7 @@ geo_attr_list=['country','city','address']
 personal_attr_list=['name','age','gender','phone_number','email','company']
 distribution_list=['normal','exponential','triangular']
 dependencies=[['city','country']]
-df = pd.read_excel('api\worldcities.xlsx','Sheet1')
+df = pd.read_excel('worldcities.xlsx','Sheet1')
 df_country_city=df[['country','city_ascii','population']]
 df_country_city=df_country_city.rename(columns={'city_ascii':'city'})
 print(df_country_city)
@@ -37,15 +39,19 @@ def get_data():
     data = {'foo': 'bar'}
     return data
 
-# @app.route('/random_data_json', methods=['POST'])
-# def post_random_data():
-#     input = request.get_json()
-#     schemas=SchemasInput(json.dumps(input))
-#     first_schema = schemas.schemas[0]
-#     df = pd.DataFrame()
-#     for attr in first_schema['attributes']:
-#         generate_column(attr['attrName'],schemas.rows,df)
-#     return df.to_csv()
+@app.route('/random_data_json', methods=['POST'])
+def post_random_data():
+    input = request.get_json()
+    # schemas=SchemasInput(json.dumps(input))
+    # first_schema = schemas.schemas[0]
+    # df = pd.DataFrame()
+    # for attr in first_schema['attributes']:
+    #     generate_column('id', attr['attrName'],schemas.rows,df)
+    # return df.to_json()
+    print(input)
+    df = pd.DataFrame()
+    df = multiple_tables(input)
+    return df.to_json()
 
 
 
@@ -114,7 +120,7 @@ def test_method():
         generate_column(c,rows,df)
     print(df)
 
-with open('api/json_example.json','r') as f:
+with open('json_example.json','r') as f:
     json_example=json.load(f)
 print(json_example)
 # todo link with api, required fields are as above
@@ -167,6 +173,7 @@ def multiple_tables(request_json):
                                 df.loc[i,attr]=store[ref_table].loc[rng_index_list[i%size],ref_column]
             print(value['name'])
             print(df)
+            return df
         
                         
                         

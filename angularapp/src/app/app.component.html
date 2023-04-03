@@ -1,13 +1,21 @@
 <div class="container">
-  <h1 id="tableLabel">Fake Data Generator</h1>
+  <h1 class="mb-5 mt-5">Realistic Fake Data Generator</h1>
 
-  <p>This component demonstrates fetching data from the server.</p>
+  <!-- <p>This component demonstrates fetching data from the server.</p> -->
 
-  <div class="row border p-1">
+  <div class="row border border-primary rounded p-2">
     <div class="col">
-      <h2>Entities</h2>
-      <button (click)="addEntity()" class="btn btn-outline-primary">Add Entity</button>
-      <div class="row mt-2 border p-2" *ngFor="let entity of entities; index as i">
+      <div class="row">
+        <div class="col">
+          <h2>Entities</h2>
+        </div>
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col">
+          <button (click)="addEntity()" class="btn btn-outline-primary">Add Entity</button>
+        </div>
+      </div>
+      <div class="row mt-2 border rounded p-2" *ngFor="let entity of entities; index as i">
         <div class="row mt-1">
           <div class="col">
             <h4>Entity name:</h4>
@@ -16,11 +24,22 @@
             <input class="form-control" (input)="onChangeEntityName(entity, $event)"/>
           </div>
           <div class="col"></div>
+          <div class="col">
+            <button (click)="delEntity(i)" class="btn btn-outline-danger">Delete Entity</button>
+          </div>
         </div>
         <div class="row mt-3">
-          <div class="col">Name</div>
-          <div class="col">Type</div>
-          <div class="col">Primary Key</div>
+          <div class="col">
+            <h4>Attributes</h4>
+          </div>
+          <div class="col"><button (click)="addAttr(entity)" class="btn btn-outline-primary">Add Attribute</button></div>
+          <div class="col"></div>
+          <div class="col"></div>
+        </div>
+        <div class="row mt-1">
+          <div class="col">Name:</div>
+          <div class="col">Type:</div>
+          <div class="col">Primary Key:</div>
           <div class="col"></div>
         </div>
         <div class="row mt-1" *ngFor="let attribute of entity.attributes; index as j">
@@ -45,12 +64,12 @@
           </div>
         </div>
         <div class="row mt-5">
-          <div class="col"><button (click)="addAttr(entity)" class="btn btn-outline-primary">Add Attribute</button></div>
-          <div class="col"><button (click)="delEntity(i)" class="btn btn-outline-danger">Delete Entity</button></div>
+          <div class="col"><label >Row Number:</label>
+            <input type="number" class="form-control" (input)="onChangeRows(entity, $event)" value="{{entity.rows}}"/></div>
+          <div class="col"></div>
           <div class="col"></div>
           <div class="col">
-            <label >Row Number:</label>
-            <input type="number" class="form-control" (input)="onChangeRows(entity, $event)" value="{{entity.rows}}"/>
+            
           </div>
         </div>
       </div>
@@ -71,17 +90,136 @@
     </div> -->
   </div>
 
-  <div class="row mt-5 border p-1">
+  <div class="row mt-5 border border-primary rounded p-2">
     <div class="col">
-      <h2>Relations</h2>
-      <button class="btn btn-outline-primary">Add Relation</button>
+      <div class="row">
+        <div class="col">
+          <h2>Relations</h2>
+        </div>
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col">
+          <button (click)="addRelation()" class="btn btn-outline-primary" [disabled]="entities.length<2">Add Relation</button>
+        </div>
+      </div>
+      <div class="row mt-2 border rounded p-2" *ngFor="let relation of relations; index as i">
+        <div class="row mt-1">
+          <div class="col">
+            <h4>Relation name:</h4>
+          </div>
+          <div class="col">
+            <input class="form-control" (input)="onChangeRelationName(relation, $event)"/>
+          </div>
+          <div class="col"></div>
+          <div class="col">
+            <button (click)="delRelation(i)" class="btn btn-outline-danger">Delete Relation</button>
+          </div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <label>Entity 1:</label>
+            <select class="form-control" (change)="onChangeRelateEntity(relation, $event, 1)">
+              <option selected disabled>{{relation.related[0]}}</option>
+              <option *ngFor="let entity of entities;  index as x" value="{{x}}">{{entity.name}}</option>
+            </select>
+            <label>Participation</label>
+            <select class="form-control" (change)="onChangeRelateEntityParticipation(relation, $event, 1)">
+              <option>true</option>
+              <option>false</option>            
+            </select>
+          </div>
+          <div class="col">
+            <label>Entity 2:</label>
+            <select class="form-control" (change)="onChangeRelateEntity(relation, $event, 2)">
+              <option selected disabled>{{relation.related[1]}}</option>
+              <option *ngFor="let entity of entities;  index as x" value="{{x}}">{{entity.name}}</option>
+            </select>
+            <label>Participation</label>
+            <select class="form-control" (change)="onChangeRelateEntityParticipation(relation, $event, 1)">
+              <option>true</option>
+              <option>false</option>            </select>
+          </div>
+          <div class="col"></div>
+          <div class="col"></div>
+        </div>
+        <div class="row mt-3">
+          <div class="col">
+            <h4>Attributes</h4>
+          </div>
+          <div class="col"><button (click)="addRelationAttr(relation)" class="btn btn-outline-primary">Add Attribute</button></div>
+          <div class="col"></div>
+          <div class="col"></div>
+        </div>
+        <div class="row mt-1">
+          <div class="col">Name:</div>
+          <div class="col">Ref Entity:</div>
+          <div class="col">Ref Attribute:</div>
+          <div class="col">Primary Key:</div>
+          <div class="col"></div>
+        </div>
+        <div class="row mt-1" *ngFor="let attribute of relation.attributes; index as j">
+          <div class="col">
+            <input (input)="onChangeRelationAttrName(attribute, $event)" 
+            class="form-control" value="{{attribute.attrName}}"/>
+          </div>
+          <div class="col">
+            <select class="form-control" (change)="onChangeRelationAttrReferenceEntity(attribute, relation.related, $event)">
+              <option selected disabled>{{attribute.attrReferenceEntity.name}}</option>
+              <option *ngFor="let relatedEntity of relation.related; index as x" value="{{x}}">
+                {{relatedEntity.name}}
+              </option>
+            </select>
+          </div>
+          <div class="col">
+            <select class="form-control" (change)="onChangeRelationAttrReferenceAttr(attribute, attribute.attrReferenceEntity.attributes, $event)">
+              <option selected disabled>{{attribute.attrReferenceAttr.attrName}}</option>
+              <option *ngFor="let blabla of attribute.attrReferenceEntity.attributes; index as y" value="{{y}}">
+                {{blabla.attrName}}
+              </option>
+            </select>
+          </div>
+          <div class="col">
+            <select class="form-control" value="{{attribute.attrIsPK}}" (change)="onChangeRelationAttrIsPK(attribute, $event)">
+              <option>true</option>
+              <option>false</option>
+            </select>
+          </div>
+          <div class="col">
+            <button (click)="delRelationAttr(relation.attributes, j)" class="btn btn-outline-danger ">Delete Attribute</button>
+          </div>
+        </div>
+        <div class="row mt-5">
+          <div class="col">
+            <label>Cardinality:</label>
+            <select class="form-control" value="{{relation.cardinality}}" (change)="onChangeRelationCardinality(relation, $event)">
+              <option>one-to-many</option>
+              <option>one-to-zero</option>
+              <option>one-to-one</option>
+            </select>
+          </div>
+          <div class="col">
+            <label>Selectivity:</label>
+            <input class="form-control" type="number" step="0.1" value="{{relation.selectivity}}" (input)="onChangeRelationSelectivity(relation, $event)"/>
+          </div>
+          <div class="col">
+          </div>
+          <div class="col">
+          </div>
+        </div>
+
+      </div>
 
     </div>
 
   </div>
 
-  
-  
+
+  <div class="row mt-5">
+    <button (click)="submit()" class="btn btn-success btn-lg ">Submit</button>
+  </div>
+  <div class="row mt-3">
+    <textarea class="form-control" disabled style="min-height: 500px;">{{finalResult}}</textarea>
+  </div>
 </div>
 
 
