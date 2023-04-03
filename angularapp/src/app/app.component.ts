@@ -1,17 +1,22 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
+import { toInteger } from '@ng-bootstrap/ng-bootstrap/util/util';
 
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
-  public forecasts?: WeatherForecast[];
+
+  allAttrTypeList = ['country','city','address',
+  'name','age','gender','phone_number','email','company'];
 
   isDataReady: boolean = false;
-  schemas: ISchema[] = [];
+  entities: IEntity[] = [];
+  relations: IRelation[] = [];
+
 
   constructor(http: HttpClient) {
     //http.get<WeatherForecast[]>('/weatherforecast').subscribe(result => {
@@ -22,68 +27,107 @@ export class AppComponent implements OnInit {
   title = 'angularapp';
 
   ngOnInit(){
-    console.log("AHHHHHHHHA");
-    this.schemas.push({
-      name: 'schema0',
+    this.entities.push({
+      name: '',
+      // attributes: new Map<string, string>(),
       attributes: [
         {
-          attrName: 'id',
-          type: 'GUID',
-          options: new Map()
+          attrName:'attr',
+          attrType:'id',
+          attrIsPK: false
         }
-      ]
+      ],
+      rows: 50
     });
   }
 
-  addSchema(){
-    console.log(JSON.stringify(this.schemas));
-    this.schemas.push({
-      name: 'schema'+this.schemas.length,
+  addEntity(){
+    console.log(JSON.stringify(this.entities));
+    this.entities.push({
+      name: '',
+      // attributes: new Map<string, string>(),
       attributes: [
         {
-          attrName: 'id',
-          type: 'GUID',
-          options: new Map()
+          attrName:'attr',
+          attrType:'id',
+          attrIsPK: false
         }
-      ]
+      ],
+      rows: 50
     });
   }
 
-  addAttr(schema: ISchema){
-    schema.attributes.push(
-      {
-        attrName:'NewAttribute',
-        type:'',
-        options: new Map()
-      }
-    );
+  addAttr(entity: IEntity){
+    entity.attributes.push({
+      attrName:'',
+      attrType:'',
+      attrIsPK: false
+    });
+    console.log(entity);
   }
 
-  delSchema(i:number){
-    this.schemas.splice(i, 1);
+  delEntity(i:number){
+    this.entities.splice(i, 1);
   }
 
-
-  showConfig(){
-    
+  onChangeEntityName(entity: IEntity, event: any){
+    entity.name = event.target.value;
   }
+  onChangeAttrName(attribute:IAttribute, event:any){
+    attribute.attrName = event.target.value;
+  }
+
+  onChangeAttrType(attribute:IAttribute, event:any){
+    attribute.attrType = event.target.value;
+  }
+
+  onChangeAttrIsPK(attribute:IAttribute, event:any){
+    if(event.target.value=='true'){
+      attribute.attrIsPK = true;
+    } else{
+      attribute.attrIsPK = false;
+    }
+  }
+
+  delAttr(attributes:IAttribute[], j:number){
+    attributes.splice(j,1);
+  }
+
+  onChangeRows(entity: IEntity, event: any){
+    entity.rows = event.target.value; // TODO: to number
+  }
+
+  
 
 }
 
-interface WeatherForecast {
-  date: string;
-  temperatureC: number;
-  temperatureF: number;
-  summary: string;
-}
 
-interface ISchema {
+interface IEntity {
   name: string;
+  // attributes: Map<string, string>; // attr_name: type
   attributes: IAttribute[];
+  rows: number;
+
 }
 
 interface IAttribute {
   attrName: string;
-  type: string;
-  options: Map<string, string>;
+  attrType: string;
+  attrIsPK: boolean;
+}
+
+interface IRelation {
+  name: string;
+  // related: 
+  attributes: IRelationAttribute[];
+  cardinality: string; //?
+  // participation:
+  selectivity: number;
+}
+
+interface IRelationAttribute{
+  attrName: string;
+  attrReferenceEntity: IEntity;
+  attrReferenceAttr: IAttribute;
+  attrIsPK: boolean;
 }
